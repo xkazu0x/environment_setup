@@ -118,10 +118,9 @@
 (setq undo-outer-limit (* 64 1024 1024))
 
 (add-hook 'window-setup-hook 'toggle-frame-maximized t)
-;;(split-window-horizontally)
 
-(ido-mode 1)
-(ido-everywhere 1)
+;;(ido-mode 1)
+;;(ido-everywhere 1)
 (global-display-line-numbers-mode 1)
 (global-hl-line-mode 1)
 
@@ -157,13 +156,13 @@
 (setq auto-save-default nil)
 
 ;; use utf-8
-(prefer-coding-system 'utf-8)
-(setq coding-system-for-read 'utf-8)
-(setq coding-system-for-write 'utf-8)
-(set-language-environment "UTF-8")
-(set-selection-coding-system 'utf-8)
-(setq locale-coding-system 'utf-8)
-(setq-default buffer-file-coding-system 'utf-8-unix)
+;; (prefer-coding-system 'utf-8)
+;; (setq coding-system-for-read 'utf-8)
+;; (setq coding-system-for-write 'utf-8)
+;; (set-language-environment "UTF-8")
+;; (set-selection-coding-system 'utf-8)
+;; (setq locale-coding-system 'utf-8)
+;; (setq-default buffer-file-coding-system 'utf-8)
 
 ;; fix scrolling
 (setq mouse-wheel-progressive-speed nil)
@@ -178,10 +177,7 @@
 
 (setq-default truncate-lines t)
 
-;;(setq icon-title-format (setq frame-title-format "%b [%f] - Emacs"))
-
-;;(setq sentence-end-double-space nil)
-;;(setq-default fill-column 80)
+(setq icon-title-format (setq frame-title-format "%b [%f] - Emacs"))
 
 (setq use-short-answers t)
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -189,11 +185,6 @@
 
 (setq visible-bell t)
 (setq ring-bell-function 'ignore)
-
-;; clipboard
-;; (setq-default select-active-regions nil)
-;; (when (boundp 'x-select-enable-primary)
-;;   (setq x-select-enable-primary nil))
 
 ;; + TUNE GC + 
 ;; the default settings are too conservative on modern machines making EMX
@@ -289,7 +280,7 @@
                                     (access-label          . -4)
                                     (substatement-open     .  0)
                                     (statement-case-intro  .  4)
-                                    (statement-block-intro .  c-lineup-for)
+                                    (statement-block-intro .  4)
                                     (case-label            .  4)
                                     (block-open            .  0)
                                     (inline-open           .  0)
@@ -301,33 +292,32 @@
   "xkazu0x C style")
 
 (defun xkazu0x-c-hook ()
-  ;; set my style for the current buffer
   (c-add-style "excalibur" xkazu0x-c-style t)
-  
-  (setq tab-width 4
-        indent-tabs-mode nil)
-
-  ;; additional style stuff
+  (setq tab-width 4 indent-tabs-mode nil)
   (c-set-offset 'member-init-intro '++)
-
-  ;; no hungry backspace
   (c-toggle-auto-hungry-state -1)
-
-  ;; newline indents, semi-colon doesn't
   (define-key c++-mode-map "\C-m" 'newline-and-indent)
   (setq c-hanging-semi&comma-criteria '((lambda () 'stop)))
-  
-  ;; handle super-tabbify (TAB completes, shift-TAB actually tabs)
   (setq dabbrev-case-replace t)
   (setq dabbrev-case-fold-search t)
   (setq dabbrev-upcase-means-case-search t)
-
-  ;; abbrevation expansion
   (abbrev-mode 1))
   
 (add-hook 'c-mode-common-hook 'xkazu0x-c-hook)
 
 ;; -+PACKAGES+=+---
+;; + IVY +
+(use-package ivy
+  :diminish ivy-mode
+  :config
+  (ivy-mode 1))
+
+;; + SWIPER +
+(use-package swiper
+  :ensure t
+  :config)
+(global-set-key (kbd "C-s") 'swiper)
+
 ;; + COMPANY +
 ;; (init-el-require-package company)
 ;; (global-company-mode)
@@ -353,18 +343,6 @@
 ;; + WHITESPACE +
 ;; (init-el-with-eval-after-load whitespace
 ;;   (setq whitespace-style '(face trailing lines-tail empty space-before-tab)))
-
-;; + IVY +
-;; (use-package ivy
-;;   :diminish ivy-mode
-;;   :config
-;;   (ivy-mode 1))
-
-;; + SWIPER +
-;; (use-package swiper
-;;   :ensure t
-;;   :config)
-;; (global-set-key (kbd "C-s") 'swiper)
 
 ;; + VERTICO +
 ;; (use-package vertico
